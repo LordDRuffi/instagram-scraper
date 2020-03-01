@@ -814,7 +814,7 @@ class Instagram:
         return data
 
     def get_followers(self, account_id, count=20, page_size=20, end_cursor='',
-                      delayed=True):
+                      delayed=True,maxInList=50):
 
         """
         :param account_id:
@@ -880,6 +880,16 @@ class Instagram:
                 accounts.append(Account(edge['node']))
                 index += 1
 
+                if len(accounts) >= maxInList:
+                    #since break 2 not in python, looking for better solution since duplicate code
+                    print("Liste groß genug:",len(accounts))
+                    data = {}
+                    data['next_page'] = next_page
+                    data['accounts'] = accounts
+
+                    return data
+
+
                 if index >= count:
                     #since break 2 not in python, looking for better solution since duplicate code
                     data = {}
@@ -896,7 +906,7 @@ class Instagram:
                 # Random wait between 1 and 3 sec to mimic browser
                 microsec = random.uniform(1.0, 3.0)
                 time.sleep(microsec)
-
+                
         data = {}
         data['next_page'] = next_page
         data['accounts'] = accounts
@@ -904,7 +914,7 @@ class Instagram:
         return data
 
     def get_following(self, account_id, count=20, page_size=20, end_cursor='',
-                      delayed=True):
+                      delayed=True,maxInList=50):
         """
         :param account_id:
         :param count:
@@ -965,6 +975,16 @@ class Instagram:
             for edge in edgesArray:
                 accounts.append(Account(edge['node']))
                 index += 1
+
+                if len(accounts) >= maxInList:
+                    # since break 2 not in python, looking for better solution since duplicate code
+                    print("Liste groß genug:",len(accounts))
+                    data = {}
+                    data['next_page'] = next_page
+                    data['accounts'] = accounts
+
+                    return data
+
                 if index >= count:
                     #since no break 2, looking for better solution since duplicate code
                     data = {}
@@ -982,7 +1002,6 @@ class Instagram:
                 microsec = random.uniform(1.0, 3.0)
                 time.sleep(microsec)
 
-        data = {}
         data['next_page'] = next_page
         data['accounts'] = accounts
 
